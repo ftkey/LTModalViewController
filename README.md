@@ -16,3 +16,5 @@ LTModalViewController a easy way to display modal style controller
         
     }
 ```
+
+![DEMO](https://github.com/Ftkey/LTModalViewController/raw/master/Example/DEMO.gif)
