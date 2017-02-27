@@ -9,14 +9,16 @@
 Pod::Spec.new do |s|
 
   s.name         = "LTModalViewController"
-  s.version      = "1.0.0"
+  s.version      = "2.0.0"
   s.summary      = "LTModalViewController - A easy way to display modal style controller -- (Swift & Objc)"
   s.homepage     = "https://futao.me/"
   s.license      = 'MIT'
   s.author       = "Ftkey"
   s.requires_arc = true
   s.source       = {:git => 'https://github.com/Ftkey/LTModalViewController.git', :tag => s.version.to_s }
-
+  s.pod_target_xcconfig = {
+    'SWIFT_VERSION' => '3.0',
+  }
   s.ios.deployment_target = '8.0'
 
   s.frameworks  = "Foundation"

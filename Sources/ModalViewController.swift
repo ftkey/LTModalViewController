@@ -11,42 +11,42 @@ import UIKit
 
 @objc(LTModalViewControllerPresentStyle)
 public enum PresentStyle:Int {
-    case Alert
-    case ActionSheet
-    case Custom
+    case alert
+    case actionSheet
+    case custom
 
 }
 
 @objc(LTModalViewController)
-public class ModalViewController: UIViewController {
+open class ModalViewController: UIViewController {
     
-    private(set) public var rootController:UIViewController = UIViewController()
+    fileprivate(set) open var rootController:UIViewController = UIViewController()
     
-    private(set) public var overlayView: UIControl = UIControl()
+    fileprivate(set) open var overlayView: UIControl = UIControl()
 
-    private(set) public var presentedViewSize:CGSize = CGSizeZero
+    fileprivate(set) open var presentedViewSize:CGSize = CGSize.zero
     
-    private(set) public var presentStyle:PresentStyle = .Alert
+    fileprivate(set) open var presentStyle:PresentStyle = .alert
 
-    private(set) public var presentContentInset:CGFloat = 0
+    fileprivate(set) open var presentContentInset:CGFloat = 0
 
-    private(set) public var cornerRadius:CGFloat = 0
+    fileprivate(set) open var cornerRadius:CGFloat = 0
     
-    private(set) public var presentAnimator:TransitionAnimator?
-    private(set) public var dismissAnimator:TransitionAnimator?
+    fileprivate(set) open var presentAnimator:TransitionAnimator?
+    fileprivate(set) open var dismissAnimator:TransitionAnimator?
     
 //    public var presentCompletionHandler : ((Void) -> (Void))? not yet implementation
 //    public var dismissCompletionHandler : ((Void) -> (Void))? not yet implementation
 
     public convenience init(rootController controller: UIViewController ,contentSize:CGSize , contentInset:CGFloat = 0 , radius:CGFloat = 0, presentAnimator:TransitionAnimator ,dismissAnimator:TransitionAnimator ) {
-        self.init(rootController:controller ,contentSize:contentSize , style:.Custom , contentInset:contentInset , radius:radius)
+        self.init(rootController:controller ,contentSize:contentSize , contentInset:contentInset , radius:radius , style:.custom)
         self.presentAnimator = presentAnimator
         self.dismissAnimator = dismissAnimator
         self.transitioningDelegate = self
-        self.modalPresentationStyle = .Custom
+        self.modalPresentationStyle = .custom
     }
 
-    public convenience init(rootController controller: UIViewController ,contentSize:CGSize , contentInset:CGFloat = 0 , radius:CGFloat = 0 , style:PresentStyle = .Alert ) {
+    public convenience init(rootController controller: UIViewController ,contentSize:CGSize , contentInset:CGFloat = 0 , radius:CGFloat = 0 , style:PresentStyle = .alert ) {
         
         self.init()
         
@@ -57,18 +57,18 @@ public class ModalViewController: UIViewController {
         self.cornerRadius = radius
         
         
-        self.overlayView.backgroundColor = UIColor.blackColor()
+        self.overlayView.backgroundColor = UIColor.black
         overlayView.alpha = 0
-        overlayView.addTarget(self, action: #selector(touchOverlayView), forControlEvents: .TouchUpInside)
+        overlayView.addTarget(self, action: #selector(touchOverlayView), for: .touchUpInside)
         switch presentStyle {
-        case .Alert:
+        case .alert:
             self.transitioningDelegate = self
-            self.modalPresentationStyle = .Custom
+            self.modalPresentationStyle = .custom
             self.presentAnimator = AlertTransitionAnimator.presentAnimator
             self.dismissAnimator = AlertTransitionAnimator.dismissAnimator
-        case .ActionSheet:
+        case .actionSheet:
             self.transitioningDelegate = self
-            self.modalPresentationStyle = .Custom
+            self.modalPresentationStyle = .custom
             self.presentAnimator = ActionSheetTransitionAnimator.presentAnimator
             self.dismissAnimator = ActionSheetTransitionAnimator.dismissAnimator
         default: break
@@ -76,19 +76,19 @@ public class ModalViewController: UIViewController {
         
     }
     
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.clearColor();
-        view.autoresizingMask = [.FlexibleWidth,.FlexibleHeight]
+        view.backgroundColor = UIColor.clear;
+        view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         
         view.addSubview(overlayView)
-        overlayView.frame  = CGRectMake(0, 0, view.frame.size.width, view.frame.size.height)
-        overlayView.autoresizingMask = [.FlexibleWidth,.FlexibleHeight]
+        overlayView.frame  = CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height)
+        overlayView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
 
         self.addChildViewController(rootController)
         view.addSubview(rootController.view)
-        rootController.view.frame = CGRectMake((view.frame.width-presentedViewSize.width)/2, (view.frame.height-presentedViewSize.height)/2 + presentContentInset, presentedViewSize.width, presentedViewSize.height)
-        rootController.view.autoresizingMask = [.FlexibleTopMargin,.FlexibleBottomMargin,.FlexibleLeftMargin,.FlexibleRightMargin]
+        rootController.view.frame = CGRect(x: (view.frame.width-presentedViewSize.width)/2, y: (view.frame.height-presentedViewSize.height)/2 + presentContentInset, width: presentedViewSize.width, height: presentedViewSize.height)
+        rootController.view.autoresizingMask = [.flexibleTopMargin,.flexibleBottomMargin,.flexibleLeftMargin,.flexibleRightMargin]
         
         if cornerRadius > 0 {
             rootController.view.layer.masksToBounds = true;
@@ -96,18 +96,18 @@ public class ModalViewController: UIViewController {
         }
     }
     
-    func touchOverlayView(sender:AnyObject?) -> Void {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func touchOverlayView(_ sender:AnyObject?) -> Void {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 // MARK: - UIViewControllerTransitioningDelegate
 extension ModalViewController : UIViewControllerTransitioningDelegate {
     
-    public func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self.presentAnimator
     }
     
-    public func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self.dismissAnimator
     }
 }

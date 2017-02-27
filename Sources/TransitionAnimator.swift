@@ -10,13 +10,13 @@ import UIKit
 import Foundation
 
 @objc(LTTransitionAnimator)
-public class TransitionAnimator: NSObject {
+open class TransitionAnimator: NSObject {
     
-    private var transitionDuration : NSTimeInterval = 0.25
-    private var animateTransitionHandler : ((transitionContext: UIViewControllerContextTransitioning) ->Void)?
-    private var completionHandler : ((Bool) -> Void)?
+    fileprivate var transitionDuration : TimeInterval = 0.25
+    fileprivate var animateTransitionHandler : ((_ transitionContext: UIViewControllerContextTransitioning) ->Void)?
+    fileprivate var completionHandler : ((Bool) -> Void)?
 
-    public init(duration : NSTimeInterval = 0.25 , animations:((transitionContext: UIViewControllerContextTransitioning) -> Void)? = nil, completion:((Bool) -> Void)? = nil){
+    public init(duration : TimeInterval = 0.25 , animations:((_ transitionContext: UIViewControllerContextTransitioning) -> Void)? = nil, completion:((Bool) -> Void)? = nil){
         super.init()
         transitionDuration = duration
         animateTransitionHandler = animations
@@ -24,29 +24,29 @@ public class TransitionAnimator: NSObject {
     }
 }
 extension TransitionAnimator: UIViewControllerAnimatedTransitioning {
-    public func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return transitionDuration
     }
     
-    public func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
+    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         if let animateTransitionHandler = animateTransitionHandler {
-            animateTransitionHandler(transitionContext:transitionContext)
+            animateTransitionHandler(transitionContext)
         }
         
     }
     
-    public func animationEnded(transitionCompleted: Bool) {
+    public func animationEnded(_ transitionCompleted: Bool) {
         if let completionHandler = completionHandler {
             completionHandler(transitionCompleted)
         }
     }
 }
 extension TransitionAnimator:UIViewControllerTransitioningDelegate {
-    public func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self
     }
     
-    public func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self
     }
 }

@@ -10,51 +10,49 @@ import Foundation
 import UIKit
 
 @objc(LTActionSheetTransitionAnimator)
-public class ActionSheetTransitionAnimator: NSObject {
+open class ActionSheetTransitionAnimator: NSObject {
     
-    public static var presentAnimator:TransitionAnimator  {
+    open static var presentAnimator:TransitionAnimator  {
         return TransitionAnimator(duration: 0.25, animations: { transitionContext in
             
-            guard let contextController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey) else {
+            guard let contextController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to) else {
                 return
             }
             guard let modalVc = contextController as? ModalViewController else {
                 return
             }
+            let containerView = transitionContext.containerView
+            containerView.addSubview(modalVc.view)
+            modalVc.overlayView.alpha = 0;
+            modalVc.rootController.view.frame = CGRect(x: (modalVc.view.frame.width-modalVc.presentedViewSize.width)/2, y: modalVc.view.frame.height, width: modalVc.presentedViewSize.width, height: modalVc.presentedViewSize.height)
             
-            if let containerView = transitionContext.containerView() {
-                containerView.addSubview(modalVc.view)
-                modalVc.overlayView.alpha = 0;
-                modalVc.rootController.view.frame = CGRectMake((modalVc.view.frame.width-modalVc.presentedViewSize.width)/2, modalVc.view.frame.height, modalVc.presentedViewSize.width, modalVc.presentedViewSize.height)
-
-                UIView.animateWithDuration(0.25, animations: {
-                    modalVc.overlayView.alpha = 0.4
-                    modalVc.rootController.view.frame = CGRectMake((modalVc.view.frame.width-modalVc.presentedViewSize.width)/2, (modalVc.view.frame.height-modalVc.presentedViewSize.height) - modalVc.presentContentInset, modalVc.presentedViewSize.width, modalVc.presentedViewSize.height)
-
-                    }, completion: { (finished) in
-                        transitionContext.completeTransition(finished)
-                })
-            }
+            UIView.animate(withDuration: 0.25, animations: {
+                modalVc.overlayView.alpha = 0.4
+                modalVc.rootController.view.frame = CGRect(x: (modalVc.view.frame.width-modalVc.presentedViewSize.width)/2, y: (modalVc.view.frame.height-modalVc.presentedViewSize.height) - modalVc.presentContentInset, width: modalVc.presentedViewSize.width, height: modalVc.presentedViewSize.height)
+                
+            }, completion: { (finished) in
+                transitionContext.completeTransition(finished)
+            })
         }) { transitionCompleted in
             
         }
     }
     
-    public static var dismissAnimator:TransitionAnimator  {
+    open static var dismissAnimator:TransitionAnimator  {
         
         return TransitionAnimator(duration: 0.25, animations: { transitionContext in
-            guard let contextController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey) else {
+            guard let contextController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else {
                 return
             }
             guard let modalVc = contextController as? ModalViewController else {
                 return
             }
-            UIView.animateWithDuration(0.25, animations: {
+            UIView.animate(withDuration: 0.25, animations: {
                 modalVc.overlayView.alpha = 0
-                modalVc.rootController.view.frame = CGRectMake((modalVc.view.frame.width-modalVc.presentedViewSize.width)/2, modalVc.view.frame.height, modalVc.presentedViewSize.width, modalVc.presentedViewSize.height)
-
-                }, completion: { (finished) in
-                    transitionContext.completeTransition(finished)
+                modalVc.rootController.view.frame = CGRect(x: (modalVc.view.frame.width-modalVc.presentedViewSize.width)/2, y: modalVc.view.frame.height, width: modalVc.presentedViewSize.width, height: modalVc.presentedViewSize.height)
+                
+            }, completion: { (finished) in
+                transitionContext.completeTransition(finished)
             })
             
         }) { transitionCompleted in
