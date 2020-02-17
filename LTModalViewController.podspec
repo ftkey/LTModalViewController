@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "LTModalViewController"
-  s.version      = "2.0.1"
+  s.version      = "2.0.2"
   s.summary      = "LTModalViewController - A easy way to display modal style controller -- (Swift & Objc)"
   s.homepage     = "https://futao.me/"
   s.license      = 'MIT'
