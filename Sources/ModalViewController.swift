@@ -38,7 +38,7 @@ open class ModalViewController: UIViewController {
 //    public var presentCompletionHandler : ((Void) -> (Void))? not yet implementation
 //    public var dismissCompletionHandler : ((Void) -> (Void))? not yet implementation
 
-    public convenience init(rootController controller: UIViewController ,contentSize:CGSize , contentInset:CGFloat = 0 , radius:CGFloat = 0, presentAnimator:TransitionAnimator ,dismissAnimator:TransitionAnimator ) {
+    @objc public convenience init(rootController controller: UIViewController ,contentSize:CGSize , contentInset:CGFloat = 0 , radius:CGFloat = 0, presentAnimator:TransitionAnimator ,dismissAnimator:TransitionAnimator ) {
         self.init(rootController:controller ,contentSize:contentSize , contentInset:contentInset , radius:radius , style:.custom)
         self.presentAnimator = presentAnimator
         self.dismissAnimator = dismissAnimator
@@ -46,7 +46,7 @@ open class ModalViewController: UIViewController {
         self.modalPresentationStyle = .custom
     }
 
-    public convenience init(rootController controller: UIViewController ,contentSize:CGSize , contentInset:CGFloat = 0 , radius:CGFloat = 0 , style:PresentStyle = .alert ) {
+    @objc public convenience init(rootController controller: UIViewController ,contentSize:CGSize , contentInset:CGFloat = 0 , radius:CGFloat = 0 , style:PresentStyle = .alert ) {
         
         self.init()
         
@@ -103,11 +103,11 @@ open class ModalViewController: UIViewController {
 // MARK: - UIViewControllerTransitioningDelegate
 extension ModalViewController : UIViewControllerTransitioningDelegate {
     
-    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    @objc public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self.presentAnimator
     }
     
-    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    @objc public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self.dismissAnimator
     }
 }

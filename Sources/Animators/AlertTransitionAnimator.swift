@@ -12,7 +12,7 @@ import UIKit
 @objc(LTAlertTransitionAnimator)
 open class AlertTransitionAnimator: NSObject {
     
-    open static var presentAnimator:TransitionAnimator  {
+    @objc open static var presentAnimator:TransitionAnimator  {
         return TransitionAnimator(duration: 0.25, animations: { transitionContext in
             
             guard let contextController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to) else {
@@ -41,7 +41,7 @@ open class AlertTransitionAnimator: NSObject {
         }
     }
     
-    open static var dismissAnimator:TransitionAnimator  {
+    @objc open static var dismissAnimator:TransitionAnimator  {
         
         return TransitionAnimator(duration: 0.25, animations: { transitionContext in
             guard let contextController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from) else {
