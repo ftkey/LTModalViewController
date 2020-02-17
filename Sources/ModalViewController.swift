@@ -96,7 +96,7 @@ open class ModalViewController: UIViewController {
         }
     }
     
-    func touchOverlayView(_ sender:AnyObject?) -> Void {
+    @objc func touchOverlayView(_ sender:AnyObject?) -> Void {
         self.dismiss(animated: true, completion: nil)
     }
 }
