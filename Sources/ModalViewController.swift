@@ -35,6 +35,9 @@ open class ModalViewController: UIViewController {
     fileprivate(set) open var presentAnimator:TransitionAnimator?
     fileprivate(set) open var dismissAnimator:TransitionAnimator?
     
+    @objc open var canTouchDismiss:Bool = true
+
+    
 //    public var presentCompletionHandler : ((Void) -> (Void))? not yet implementation
 //    public var dismissCompletionHandler : ((Void) -> (Void))? not yet implementation
 
@@ -97,7 +100,9 @@ open class ModalViewController: UIViewController {
     }
     
     @objc func touchOverlayView(_ sender:AnyObject?) -> Void {
-        self.dismiss(animated: true, completion: nil)
+        if canTouchDismiss == true {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }
 // MARK: - UIViewControllerTransitioningDelegate
